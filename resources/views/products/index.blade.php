@@ -1,4 +1,6 @@
-@foreach ($products as $product)
-    <h1>{{$product->name}}</h1>
+@forelse ($products as $product)
+    <h3>{{$product->name}}</h3>
     <p>{{$product->price}}</p>
-@endforeach
+@empty
+    <p>{{ __('No products found') }}</p>
+@endforelse
