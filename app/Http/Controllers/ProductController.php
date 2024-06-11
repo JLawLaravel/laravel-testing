@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductIndexResource;
+use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
@@ -14,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::paginate(10);
+        $products = Product::latest()->paginate(5);
         // return ProductIndexResource::collection($products);
         return view('products.index', compact('products'));
     }
@@ -24,18 +25,20 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request): RedirectResponse
     {
-        //
+        Product::create($request->all());
+
+        return redirect()->route('products.index');
     }
 
-    /**
+    /** 
      * Display the specified resource.
      */
     public function show(Product $product)
@@ -56,7 +59,9 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $product->update($request->all());
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -64,6 +69,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return redirect()->route('products.index');
     }
 }

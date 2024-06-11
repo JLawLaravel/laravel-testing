@@ -5,75 +5,67 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <div class="d-flex justify-content-end mb-3">
+    <form action="/products/{{ $product->id }}" method="post">
+        @csrf
+        @method('PATCH')
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">
+                        <div class="d-flex justify-content-end mb-3">
 
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">#ID</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">PRICE (USD)</th>
-                                <th scope="col">PRICE (EUR)</th>
-                                <th scope="col">Operation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div>
-                                        <input type="text" value="{{ $product->id }}">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <input type="text" value="{{ $product->name }}">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <input type="text" value="{{ $product->price }}">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        {{ $product->price_eur }} (USD)
-                                    </div>
-                                </td>
-                                <td>
-                                    <a href="#" class="btn btn-primary">Update Product</a>
-                                    <a href="{{ route('products.destroy', $product->id) }}"
-                                        class="btn btn-danger">Delete</a>
-                                </td>
-
-
-                            </tr>
-
-                            {{-- @forelse ($products as $product)
+                        </div>
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <th>{{ $product->id }}</th>
-                                    <th>{{ $product->name }}</th>
-                                    <th>{{ $product->price }} USD</th>
-                                    <th>{{ $product->price_eur }} EUR</th>
-                                    <th>
-                                        <a href="{{ route('products.edit', $product->id) }}"
-                                            class="btn btn-warning">Edit</a>
-                                        <a href="{{ route('products.destroy', $product->id) }}"
-                                            class="btn btn-danger">Delete</a>
-                                    </th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">PRICE (USD)</th>
+                                    <th scope="col">Operation</th>
                                 </tr>
-                            @empty
-                                <tr>{{ __('No products found') }}</tr>
-                            @endforelse --}}
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <input type="text" value="{{ $product->name }}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <input type="text" value="{{ $product->price }}">
+                                        </div>
+                                    </td>
+                                    <td>
 
-                        </tbody>
-                    </table>
+
+                                        <x-primary-button href="#" class="btn btn-primary">Update
+                                            Product</x-primary-button>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <x-secondary-button><a href="{{ route('products.index') }}">Cancel</a></x-secondary-button>
+
+                        <form action="/products/{{ $product->id }}" method="post" class="hidden" id="delete-form">
+                            @csrf
+                            @method('DELETE')
+                            <x-danger-button href="{{ route('products.destroy', $product->id) }}"
+                                class="btn btn-danger">Delete</x-danger-button>
+                        </form>
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </x-app-layout>
