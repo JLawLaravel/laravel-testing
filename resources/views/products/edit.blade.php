@@ -37,21 +37,23 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <a href="{{ route('products.index') }}">
-                                        <x-secondary-button>Cancel</x-secondary-button>
-                                    </a>
+                            @if (auth()->user()->is_admin)
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <a href="{{ route('products.index') }}">
+                                            <x-secondary-button>Cancel</x-secondary-button>
+                                        </a>
 
-                                    <x-primary-button class="btn btn-primary">Update
-                                        Product</x-primary-button>
+                                        <x-primary-button class="btn btn-primary">Update
+                                            Product</x-primary-button>
+                                    </div>
+                                    <div>
+                                        <x-danger-button form="delete-form" class="btn btn-danger"
+                                            onclick="return confirm('Are you sure?')">Delete</x-danger-button>
+
+                                    </div>
                                 </div>
-                                <div>
-                                    <x-danger-button form="delete-form" class="btn btn-danger">Delete</x-danger-button>
-                                </div>
-                            </div>
-
-
+                            @endif
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>
@@ -70,6 +72,5 @@
             @csrf
             @method('DELETE')
         </form>
-
     </div>
 </x-app-layout>
