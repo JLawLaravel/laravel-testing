@@ -19,33 +19,27 @@
                                 <tr>
                                     <th scope="col">Name</th>
                                     <th scope="col">PRICE (USD)</th>
-                                    <th scope="col">Operation</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>
                                         <div>
-                                            <input type="text" name="name" id="name" placeholder="Apple"
-                                                required>
+                                            <input class="w-100 border-none" type="text" name="name"
+                                                id="name" placeholder="Enter product name" required />
                                         </div>
                                     </td>
                                     <td>
                                         <div>
-                                            <input type="text" name="price" id="price"
-                                                placeholder="100USD - 1000USD" required>
+                                            <input class="w-100 border-none" type="text" name="price"
+                                                id="price" placeholder="Enter product price" required>
                                         </div>
-                                    </td>
-                                    <td>
-                                        <x-primary-button type="submit">
-                                            Add product
-                                        </x-primary-button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                         <x-secondary-button><a href="{{ route('products.index') }}">Cancel</a></x-secondary-button>
-
+                        <x-primary-button type="submit">Add product</x-primary-button>
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>

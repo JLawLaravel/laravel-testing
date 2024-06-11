@@ -5,9 +5,11 @@
                 {{ __('Products') }}
             </h2>
             @if (auth()->user()->is_admin)
-                <x-primary-button>
-                    <a href="{{ route('products.create') }}">Add new product</a>
-                </x-primary-button>
+                <a href="{{ route('products.create') }}">
+                    <x-primary-button>
+                        Add new product
+                    </x-primary-button>
+                </a>
             @endif
 
 
@@ -23,12 +25,14 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">Name</th>
+                                <th scope="col">Product Name</th>
                                 <th scope="col">PRICE (USD)</th>
                                 <th scope="col">PRICE (EUR)</th>
                                 @if (auth()->user()->is_admin)
-                                    <th scope="col">Operation</th>
-                                @endif
+                                    {{-- [tl! add:start] --}}
+                                    <th class="px-6 py-3 bg-gray-50 text-left">
+                                    </th>
+                                @endif {{-- [tl! add:end] --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -40,9 +44,11 @@
                                     <td>{{ $product->price_eur }} EUR</td>
                                     @if (auth()->user()->is_admin)
                                         <td>
-                                            <x-secondary-button>
-                                                <a href="{{ route('products.edit', $product->id) }}">Edit</a>
-                                            </x-secondary-button>
+                                            <a href="{{ route('products.edit', $product->id) }}">
+                                                <x-primary-button>
+                                                    Edit
+                                                </x-primary-button>
+                                            </a>
                                         </td>
                                     @endif
                                 </tr>
