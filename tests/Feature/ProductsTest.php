@@ -4,6 +4,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Tests\TestCase;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
@@ -11,6 +12,15 @@ use function Pest\Laravel\get;
 beforeEach(function () {
     $this->user = User::factory()->create();
 });
+
+function asAdmin(): TestCase
+{
+    $user = User::factory()->create([
+        'is_admin' => true,
+    ]);
+ 
+    return test()->actingAs($user);
+}
 
 it('homepage contains empty table', function () {
     actingAs($this->user)
@@ -46,4 +56,18 @@ it('paginated products table doesnt contain 11th record', function () {
         ->assertViewHas('products', function (LengthAwarePaginator $collection) use ($lastProduct) {
             return $collection->doesntContain($lastProduct);
         });
+});
+
+test('admin can see products create button', function () {
+    asAdmin() 
+        ->get('/products')
+        ->assertStatus(200)
+        ->assertSee('Add new product');
+});
+ 
+test('non admin cannot see products create button', function () {
+    actingAs($this->user)
+        ->get('/products')
+        ->assertStatus(200)
+        ->assertDontSee('Add new product');
 });
