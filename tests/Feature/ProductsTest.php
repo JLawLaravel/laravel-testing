@@ -8,6 +8,7 @@ use Tests\TestCase;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
+use function Pest\Laravel\getJson;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
@@ -72,12 +73,7 @@ test('non admin cannot see products create button', function () {
         ->assertDontSee('Add new product');
 });
 
-test('create product successful', function () {
-    $product = [
-        'name' => 'Product 123',
-        'price' => 1234
-    ];
- 
+test('create product successful', function ($product) {
     asAdmin()
         ->post('/products', $product)
         ->assertStatus(302)
@@ -87,22 +83,23 @@ test('create product successful', function () {
     $this->assertDatabaseHas('products', $product);
  
     $lastProduct = Product::latest()->first();
-    expect($product['name'])->toBe($lastProduct->name)
+    
+    expect($product['name'])->toBe($lastProduct->name) 
         ->and($product['price'])->toBe($lastProduct->price);
-});
+})->with('products');
 
-test('product edit contains correct values', function () {
-    $product = Product::factory()->create();
+test('product edit contains correct values', function ($product) {
+    // $product = Product::factory()->create();
  
     asAdmin()->get('products/' . $product->id . '/edit')
         ->assertStatus(200)
         ->assertSee('value="' . $product->name . '"', false) 
         ->assertSee('value="' . $product->price . '"', false)
         ->assertViewHas('product', $product);; 
-});
+})->with('create product');
 
-test('product update validation error redirects back to form', function () {
-    $product = Product::factory()->create();
+test('product update validation error redirects back to form', function ($product) {
+    // $product = Product::factory()->create();
  
     asAdmin()->put('products/' . $product->id, [
         'name' => '',
@@ -111,7 +108,7 @@ test('product update validation error redirects back to form', function () {
         ->assertStatus(302) 
         ->assertInvalid(['name', 'price'])
         ->assertSessionHasErrors(['name', 'price']); 
-});
+})->with('create product');
 
 test('product delete successful', function () {
     $product = Product::factory()->create();
@@ -126,4 +123,4 @@ test('product delete successful', function () {
 
     $this->assertModelMissing($product); 
     $this->assertDatabaseEmpty('products'); 
-});
+}); 

@@ -38,7 +38,11 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <x-secondary-button><a href="{{ route('products.index') }}">Cancel</a></x-secondary-button>
+                        <a href="{{ route('products.index') }}">
+                            <x-secondary-button>
+                                Cancel
+                            </x-secondary-button>
+                        </a>
                         <x-primary-button type="submit">Add product</x-primary-button>
                         @if ($errors->any())
                             <div class="alert alert-danger">
